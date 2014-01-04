@@ -1,28 +1,28 @@
-#Ruby CalDAV library named "agcaldav"
-**agcaldav is a CalDAV library based on martinpovolny/ruby-caldav and 4fthawaiian/ruby-caldav and collectiveidea/caldav**
+#Ruby CalDAV library for iCloud Caldav
+**caldav-icloud is based on agilastic/agcaldav, modified to work for Apple's iCloud**
 
-**Please keep in mind, agcaldav ist still under heavy development and still not finished...**
+**caldav-icloud is still under heavy development and still not finished...**
 
 ##Usage Events
 
 First, you've to install the gem
 
-    gem install agcaldav
+    gem install caldav-icloud
 
 and require it
 
-    require "agcaldav"
+    require "caldav-icloud"
 
 Next you have to obtain the URI, username and password to a CalDAV-Server. If you don't have one try RADICALE (https://github.com/agilastic/Radicale). It's small, simple and written in python. In the following steps I'm using the default params of Radical.
 
 
-Now you can e.g. create a new AgCalDAV-Client:
+Now you can e.g. create a new CalDAViCloud-Client:
     	
-	cal = AgCalDAV::Client.new(:uri => "http://localhost:5232/user/calendar", :user => "user" , :password => "")
+	cal = CalDAViCloud::Client.new(:uri => "http://localhost:5232/user/calendar", :user => "user" , :password => "")
 
 Alternatively, the proxy parameters can be specified:
 
-	cal = AgCalDAV::Client.new(:uri => "http://localhost:5232/user/calendar",:user => "user" , :password => "password", :proxy_uri => "http://my-proxy.com:8080")
+	cal = CalDAViCloud::Client.new(:uri => "http://localhost:5232/user/calendar",:user => "user" , :password => "password", :proxy_uri => "http://my-proxy.com:8080")
 
 
 ####Create an Event
@@ -81,8 +81,6 @@ get UID of this Event:
     cal.delete_event("e795c480-34e0-0130-7d1d-109add70606c")
 
 
-
-
 ##Usage ToDo
 
 ####not finished ATM
@@ -100,7 +98,7 @@ Have a look tomorrow...
 
 ##Testing
 
-agcaldav will use RSpec for its test coverage. Inside the gem
+caldav-icloud will use RSpec for its test coverage. Inside the gem
 directory, you can run the specs for RoR 3.x with:
 
   rake spec 
@@ -126,6 +124,6 @@ MIT
 5. Open a [Pull Request][1]
 6. Enjoy a refreshing Club Mate and wait
 
-[c]: https://github.com/agilastic/agcaldav/contributors
-[1]: https://github.com/agilastic/agcaldav/pulls/
+[c]: https://github.com/n8vision/caldav-icloud/contributors
+[1]: https://github.com/n8vision/caldav-icloud/pulls/
 

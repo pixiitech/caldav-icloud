@@ -8,5 +8,5 @@ require 'time'
 require 'date'
 
 ['client.rb', 'request.rb', 'net.rb', 'query.rb', 'filter.rb', 'event.rb', 'todo.rb', 'format.rb'].each do |f|
-    require File.join( File.dirname(__FILE__), 'agcaldav', f )
+    require File.join( File.dirname(__FILE__), 'caldav-icloud', f )
 end

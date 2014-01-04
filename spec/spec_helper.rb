@@ -1,6 +1,6 @@
 require 'rspec'
 require 'rubygems'
-require 'agcaldav'
+require 'caldav-icloud'
 
 RSpec.configure do |config|
   # some (optional) config here

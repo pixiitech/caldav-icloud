@@ -1,10 +1,10 @@
 # -*- encoding: utf-8 -*-
 $:.push File.expand_path("../lib", __FILE__)
-require File.expand_path('../lib/agcaldav/version', __FILE__)
+require File.expand_path('../lib/caldav-icloud/version', __FILE__)
 
 Gem::Specification.new do |s|
-  s.name        = "agcaldav"
-  s.version     = AgCalDAV::VERSION
+  s.name        = "caldav-icloud"
+  s.version     = CalDAViCloud::VERSION
   s.summary     = "Ruby CalDAV client"
   s.description = "yet another great Ruby client for CalDAV calendar and tasks."
 
@@ -12,9 +12,9 @@ Gem::Specification.new do |s|
 
   s.license     = 'MIT'
 
-  s.homepage    = %q{https://github.com/agilastic/agcaldav}
-  s.authors     = [%q{Alex Ebeling-Hoppe}]
-  s.email       = [%q{ebeling-hoppe@agilastic.de}]
+  s.homepage    = %q{https://github.com/n8vision/caldav-icloud}
+  s.authors     = [%q{Nick Adams}]
+  s.email       = [%q{n8vision@gmail.com}]
   s.add_runtime_dependency 'icalendar'
   s.add_runtime_dependency 'uuid'
   s.add_runtime_dependency 'builder'
@@ -25,11 +25,11 @@ Gem::Specification.new do |s|
 
 
   s.description = <<-DESC
-  agcaldav is yet another great Ruby client for CalDAV calendar.  It is based on the icalendar gem.
+  caldav-icloud is a Ruby client for CalDAV calendar made to work with Apple's iCloud.  It is based on the icalendar gem.
 DESC
   s.post_install_message = <<-POSTINSTALL
-  Changelog: https://github.com/agilastic/agcaldav/blob/master/CHANGELOG.rdoc
-  Examples:  https://github.com/agilastic/agcaldav
+  Changelog: https://github.com/n8vision/caldav-icloud/blob/master/CHANGELOG.rdoc
+  Examples:  https://github.com/n8vision/caldav-icloud
 POSTINSTALL
 
 

@@ -1,4 +1,4 @@
-module AgCalDAV
+module CalDAViCloud
   module Filter
     class Base
       attr_accessor :parent, :child

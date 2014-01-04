@@ -1,4 +1,4 @@
-module AgCalDAV
+module CalDAViCloud
   class Client
     include Icalendar
     attr_accessor :host, :port, :url, :user, :password, :ssl
@@ -72,10 +72,10 @@ module AgCalDAV
 			req.add_field 'Authorization', digestauth('REPORT')
 		end
 		    if data[:start].is_a? Integer
-          req.body = AgCalDAV::Request::ReportVEVENT.new(Time.at(data[:start]).utc.strftime("%Y%m%dT%H%M%S"), 
+          req.body = CalDAViCloud::Request::ReportVEVENT.new(Time.at(data[:start]).utc.strftime("%Y%m%dT%H%M%S"), 
                                                         Time.at(data[:end]).utc.strftime("%Y%m%dT%H%M%S") ).to_xml
         else
-          req.body = AgCalDAV::Request::ReportVEVENT.new(DateTime.parse(data[:start]).utc.strftime("%Y%m%dT%H%M%S"), 
+          req.body = CalDAViCloud::Request::ReportVEVENT.new(DateTime.parse(data[:start]).utc.strftime("%Y%m%dT%H%M%S"), 
                                                         DateTime.parse(data[:end]).utc.strftime("%Y%m%dT%H%M%S") ).to_xml
         end
         res = http.request(req)
@@ -261,7 +261,7 @@ module AgCalDAV
         else
         	req.add_field 'Authorization', digestauth('REPORT')
         end
-        req.body = AgCalDAV::Request::ReportVTODO.new.to_xml
+        req.body = CalDAViCloud::Request::ReportVTODO.new.to_xml
         res = http.request( req )
       }
       errorhandling res 
@@ -319,10 +319,10 @@ module AgCalDAV
   end
 
 
-  class AgCalDAVError < StandardError
+  class CalDAViCloudError < StandardError
   end
-  class AuthenticationError < AgCalDAVError; end
-  class DuplicateError      < AgCalDAVError; end
-  class APIError            < AgCalDAVError; end
-  class NotExistError       < AgCalDAVError; end
+  class AuthenticationError < CalDAViCloudError; end
+  class DuplicateError      < CalDAViCloudError; end
+  class APIError            < CalDAViCloudError; end
+  class NotExistError       < CalDAViCloudError; end
 end

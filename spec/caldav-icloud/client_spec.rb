@@ -2,12 +2,12 @@
 require 'spec_helper'
 require 'fakeweb'
 
-require 'agcaldav'
+require 'caldav-icloud'
 
-describe AgCalDAV::Client do
+describe CalDAViCloud::Client do
 
   before(:each) do
-    @c = AgCalDAV::Client.new(:uri => "http://localhost:5232/user/calendar", :user => "user" , :password => "")
+    @c = CalDAViCloud::Client.new(:uri => "http://localhost:5232/user/calendar", :user => "user" , :password => "")
   end
 
   before(:all) do
@@ -20,7 +20,7 @@ describe AgCalDAV::Client do
 
 
   it "check Class of new calendar" do
-    @c.class.to_s.should == "AgCalDAV::Client"
+    @c.class.to_s.should == "CalDAViCloud::Client"
   end
 
   it "create one event" do
@@ -45,7 +45,7 @@ describe AgCalDAV::Client do
   it "failed create one event DuplicateError" do
     uid = "5385e2d0-3707-0130-9e49-0019996389cc"
     FakeWeb.register_uri(:any, %r{http://user@localhost:5232/user/calendar/(.*).ics}, :body => "BEGIN:VCALENDAR\nPRODID:.....")
-    lambda{@c.create_event(:start => "2012-12-29 10:00", :end => "2012-12-30 12:00", :title => "12345", :description => "12345 12345")}.should raise_error(AgCalDAV::DuplicateError) 
+    lambda{@c.create_event(:start => "2012-12-29 10:00", :end => "2012-12-30 12:00", :title => "12345", :description => "12345 12345")}.should raise_error(CalDAViCloud::DuplicateError) 
   end
 
 
