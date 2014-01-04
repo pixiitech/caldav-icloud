@@ -1,7 +1,7 @@
 #Ruby CalDAV library for iCloud Caldav
 **caldav-icloud is based on agilastic/agcaldav, modified to work for Apple's iCloud**
 
-**caldav-icloud is still under heavy development and still not finished...**
+**caldav-icloud is still under development and is not finished...**
 
 ##Usage Events
 
@@ -13,17 +13,11 @@ and require it
 
     require "caldav-icloud"
 
-Next you have to obtain the URI, username and password to a CalDAV-Server. If you don't have one try RADICALE (https://github.com/agilastic/Radicale). It's small, simple and written in python. In the following steps I'm using the default params of Radical.
-
-
 Now you can e.g. create a new CalDAViCloud-Client:
     	
-	cal = CalDAViCloud::Client.new(:uri => "http://localhost:5232/user/calendar", :user => "user" , :password => "")
+	cal = CalDAViCloud::Client.new(:uri => "https://p0X-caldav.icloud.com/YYYYYYYYY/calendars/ZZZZZZZZ-ZZZZ-ZZZZ-ZZZZ-ZZZZZZZZZZZZ/", :user => "icloudusername@email.com" , :password => "icloudpassword")
 
-Alternatively, the proxy parameters can be specified:
-
-	cal = CalDAViCloud::Client.new(:uri => "http://localhost:5232/user/calendar",:user => "user" , :password => "password", :proxy_uri => "http://my-proxy.com:8080")
-
+Where X, Y, and Z (corresponding to your icloud caldav server, user id, and calendar id respectively) can be found here: 
 
 ####Create an Event
 
@@ -66,8 +60,9 @@ get UID of this Event:
     => 2
 
 
-
 ####Update Event
+
+**Not tested**
 
     event = {:start => "2012-12-29 10:00", :end => "2012-12-30 12:00", :title => "12345", :description => "sdkvjsdf sdkf sdkfj sdkf dsfj"}
     # set UUID 
@@ -75,18 +70,14 @@ get UID of this Event:
     c = cal.update_event(event)
 
 
-
 ####Delete Event
 
     cal.delete_event("e795c480-34e0-0130-7d1d-109add70606c")
 
 
-##Usage ToDo
+##ToDo items
 
-####not finished ATM
-Have a look tomorrow...
-
-
+Not tested yet
 
 ##Work to be done ...
 
@@ -94,23 +85,6 @@ Have a look tomorrow...
 2. code cleanup -> more ActiveRecord style    
             
                                                              
-
-
-##Testing
-
-caldav-icloud will use RSpec for its test coverage. Inside the gem
-directory, you can run the specs for RoR 3.x with:
-
-  rake spec 
-(will be implemented in > v0.2.5)  
-
-
- 
-##Licence
-
-MIT
-
-
 
 ##Contributors
 
