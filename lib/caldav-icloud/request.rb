@@ -49,7 +49,7 @@ module CalDAViCloud
                     xml.c :filter do
                         xml.c 'comp-filter'.intern, :name=> 'VCALENDAR' do
                             xml.c 'comp-filter'.intern, :name=> 'VEVENT' do
-                                xml.c 'time-range'.intern, :start=> "#{tstart}Z", :end=> "#{tend}Z"
+                                xml.c 'time-range'.intern, :start=> "#{tstart}00Z", :end=> "#{tend}00Z"
                             end
                         end
                     end
