@@ -75,14 +75,14 @@ module CalDAViCloud
           req.body = CalDAViCloud::Request::ReportVEVENT.new(Time.at(data[:start]).utc.strftime("%Y%m%dT%H%M%S"), 
                                                         Time.at(data[:end]).utc.strftime("%Y%m%dT%H%M%S") ).to_xml
         else
-          req.body = CalDAViCloud::Request::ReportVEVENT.new(DateTime.parse(data[:start]).utc.strftime("%Y%m%dT%H%M%S"), 
-                                                        DateTime.parse(data[:end]).utc.strftime("%Y%m%dT%H%M%S") ).to_xml
+          req.body = CalDAViCloud::Request::ReportVEVENT.new(Time.parse(data[:start]).utc.strftime("%Y%m%dT%H%M%S"), 
+                                                        Time.parse(data[:end]).utc.strftime("%Y%m%dT%H%M%S") ).to_xml
         end
         res = http.request(req)
       } 
         errorhandling res
         result = ""
-        
+        #puts res.body
         xml = REXML::Document.new(res.body)
         REXML::XPath.each( xml, '//c:calendar-data/', {"c"=>"urn:ietf:params:xml:ns:caldav"} ){|c| result << c.text}
         r = Icalendar.parse(result)      
