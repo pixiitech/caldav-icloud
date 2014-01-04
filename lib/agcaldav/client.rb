@@ -311,6 +311,7 @@ module AgCalDAV
       end
     end
     def  errorhandling response   
+      raise NotFoundError if response.code.to_i == 404
       raise AuthenticationError if response.code.to_i == 401
       raise NotExistError if response.code.to_i == 410 
       raise APIError if response.code.to_i >= 500
