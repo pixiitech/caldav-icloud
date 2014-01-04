@@ -15,9 +15,26 @@ and require it
 
 Now you can e.g. create a new CalDAViCloud-Client:
     	
-	cal = CalDAViCloud::Client.new(:uri => "https://p0X-caldav.icloud.com/YYYYYYYYY/calendars/ZZZZZZZZ-ZZZZ-ZZZZ-ZZZZ-ZZZZZZZZZZZZ/", :user => "icloudusername@email.com" , :password => "icloudpassword")
+	cal = CalDAViCloud::Client.new(:uri => "https://pYY-caldav.icloud.com/XXXXXXXXX/calendars/ZZZZZZZZ-ZZZZ-ZZZZ-ZZZZ-ZZZZZZZZZZZZ/", :user => "icloudusername@email.com" , :password => "icloudpassword")
 
-Where X, Y, and Z (corresponding to your icloud caldav server, user id, and calendar id respectively) can be found here: 
+Where X, Y, and Z (corresponding to your closest icloud caldav server, icloud unique id, and calendar uuid path respectively) can be found with these links: 
+
+https://www.google.com/search?client=safari&rls=en&q=finding+your+icloud+user+id&ie=UTF-8&oe=UTF-8#q=finding+your+icloud+unique+id+caldav+path&rls=en
+
+http://apple.stackexchange.com/questions/67021/how-can-i-configure-custom-repeat-intervals-for-reminders
+
+####Find Events within time interval
+
+    result = cal.find_events(:start => "2012-10-01 08:00", :end => "2013-01-01")
+
+    >> result
+    => [#<Icalendar::Event:0x007f8ad11cfdf0 @name="VEVENT", @components={}, @properties={"sequence"=>0, "dtstamp"=>#<DateTime: 2012-12-31T13:44:10+00:00 (4244474429/1728,0/1,2299161)>, "description"=>"sdkvjsdf sdkf sdkfj sdkf dsfj", "dtend"=>#<DateTime: 2012-12-30T12:00:00+00:00 (2456292/1,0/1,2299161)>, "dtstart"=>#<DateTime: 2012-12-29T10:00:00+00:00 (29475491/12,0/1,2299161)>, "summary"=>"12345", "uid"=>"b2c45e20-3575-0130-7d2e-109add70606c", "x-radicale_name"=>"b2c45e20-3575-0130-7d2e-109add70606c.ics"}>, #<Icalendar::Event:0x007f8ad10d7dd0 @name="VEVENT", @components={}, @properties={"sequence"=>0, "dtstamp"=>#<DateTime: 2012-12-31T13:44:10+00:00 (4244474429/1728,0/1,2299161)>, "uid"=>"b2c45e20-3575-0130-7d2e-109add70606c", "x-radicale_name"=>"b2c45e20-3575-0130-7d2e-109add70606c.ics"}>]
+
+    >> result.class
+    => Array
+
+    >> result.count
+    => 2
 
 ####Create an Event
 
@@ -46,18 +63,11 @@ get UID of this Event:
     => Icalendar::Event
 
 
-####Find Events within time interval
 
-    result = cal.find_events(:start => "2012-10-01 08:00", :end => "2013-01-01")
 
-    >> result
-    => [#<Icalendar::Event:0x007f8ad11cfdf0 @name="VEVENT", @components={}, @properties={"sequence"=>0, "dtstamp"=>#<DateTime: 2012-12-31T13:44:10+00:00 (4244474429/1728,0/1,2299161)>, "description"=>"sdkvjsdf sdkf sdkfj sdkf dsfj", "dtend"=>#<DateTime: 2012-12-30T12:00:00+00:00 (2456292/1,0/1,2299161)>, "dtstart"=>#<DateTime: 2012-12-29T10:00:00+00:00 (29475491/12,0/1,2299161)>, "summary"=>"12345", "uid"=>"b2c45e20-3575-0130-7d2e-109add70606c", "x-radicale_name"=>"b2c45e20-3575-0130-7d2e-109add70606c.ics"}>, #<Icalendar::Event:0x007f8ad10d7dd0 @name="VEVENT", @components={}, @properties={"sequence"=>0, "dtstamp"=>#<DateTime: 2012-12-31T13:44:10+00:00 (4244474429/1728,0/1,2299161)>, "uid"=>"b2c45e20-3575-0130-7d2e-109add70606c", "x-radicale_name"=>"b2c45e20-3575-0130-7d2e-109add70606c.ics"}>]
+####Delete Event
 
-    >> result.class
-    => Array
-
-    >> result.count
-    => 2
+    cal.delete_event("e795c480-34e0-0130-7d1d-109add70606c")
 
 
 ####Update Event
@@ -70,12 +80,8 @@ get UID of this Event:
     c = cal.update_event(event)
 
 
-####Delete Event
 
-    cal.delete_event("e795c480-34e0-0130-7d1d-109add70606c")
-
-
-##ToDo items
+##Usage ToDo
 
 Not tested yet
 
