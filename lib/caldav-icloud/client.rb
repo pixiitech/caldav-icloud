@@ -162,13 +162,14 @@ module CalDAViCloud
         # e.geo_location = event[:geo_location]
         e.status = event[:status]
         e.url = event[:url]
-
-        e.alarm do |a|
-          a.action  = "DISPLAY" # This line isn't necessary, it's the default
-          a.summary = "Alarm notification"
-          a.trigger = "-PT15M"
-          a.x_wr_alarmuid = UUID.new.generate
-          a.description = "Event reminder"
+        if (event[:reminder_before] && event[:reminder_before] != "")
+          e.alarm do |a|
+            a.action  = "DISPLAY" # This line isn't necessary, it's the default
+            a.summary = "Alarm notification"
+            a.trigger = "-PT#{event[:reminder_before].to_i}M"
+            a.x_wr_alarmuid = UUID.new.generate
+            a.description = "Event reminder"
+          end
         end
       end
       cstring = c.to_ical
