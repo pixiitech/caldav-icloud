@@ -27,21 +27,21 @@ module CalDAViCloud
       @ssl      = uri.scheme == 'https'
       
       unless data[:authtype].nil?
-      	@authtype = data[:authtype]
-      	if @authtype == 'digest'
-      	
-      		@digest_auth = Net::HTTP::DigestAuth.new
-      		@duri = URI.parse data[:uri]
-      		@duri.user = @user
-      		@duri.password = @password
-      		
-      	elsif @authtype == 'basic'
-	    	#Don't Raise or do anything else
-	    else
-	    	raise "Authentication Type Specified Is Not Valid. Please use basic or digest"
-	    end
+        @authtype = data[:authtype]
+        if @authtype == 'digest'
+        
+          @digest_auth = Net::HTTP::DigestAuth.new
+          @duri = URI.parse data[:uri]
+          @duri.user = @user
+          @duri.password = @password
+          
+        elsif @authtype == 'basic'
+        #Don't Raise or do anything else
       else
-      	@authtype = 'basic'
+        raise "Authentication Type Specified Is Not Valid. Please use basic or digest"
+      end
+      else
+        @authtype = 'basic'
       end
     end
 
@@ -63,15 +63,15 @@ module CalDAViCloud
       events = []
       res = nil
       __create_http.start {|http|
-      	
+        
         req = Net::HTTP::Report.new(@url, initheader = {'Content-Type'=>'application/xml'} )
         
-		if not @authtype == 'digest'
-			req.basic_auth @user, @password
-		else
-			req.add_field 'Authorization', digestauth('REPORT')
-		end
-		    if data[:start].is_a? Integer
+    if not @authtype == 'digest'
+      req.basic_auth @user, @password
+    else
+      req.add_field 'Authorization', digestauth('REPORT')
+    end
+        if data[:start].is_a? Integer
           req.body = CalDAViCloud::Request::ReportVEVENT.new(Time.at(data[:start]).utc.strftime("%Y%m%dT%H%M%S"), 
                                                         Time.at(data[:end]).utc.strftime("%Y%m%dT%H%M%S") ).to_xml
         else
@@ -103,19 +103,20 @@ module CalDAViCloud
       __create_http.start {|http|
         req = Net::HTTP::Get.new("#{@url}/#{uuid}.ics")        
         if not @authtype == 'digest'
-        	req.basic_auth @user, @password
+          req.basic_auth @user, @password
         else
-        	req.add_field 'Authorization', digestauth('GET')
+          req.add_field 'Authorization', digestauth('GET')
         end
         res = http.request( req )
       }  
       errorhandling res
       begin
-      	r = Icalendar.parse(res.body)
+        r = Icalendar.parse(res.body)
+        p res.body
       rescue
-      	return false
+        return false
       else
-      	r.first.events.first 
+        r.first.events.first 
       end
 
       
@@ -126,9 +127,9 @@ module CalDAViCloud
       __create_http.start {|http|
         req = Net::HTTP::Delete.new("#{@url}/#{uuid}.ics")
         if not @authtype == 'digest'
-        	req.basic_auth @user, @password
+          req.basic_auth @user, @password
         else
-        	req.add_field 'Authorization', digestauth('DELETE')
+          req.add_field 'Authorization', digestauth('DELETE')
         end
         res = http.request( req )
       }
@@ -142,36 +143,45 @@ module CalDAViCloud
     end
 
     def create_event event
-      c = Calendar.new
-      c.events = []
+      c = Icalendar::Calendar.new
+      # c.events = []
       uuid = UUID.new.generate
       raise DuplicateError if entry_with_uuid_exists?(uuid)
-      c.event do
-        uid           uuid 
-        dtstart       DateTime.parse(event[:start])
-        dtend         DateTime.parse(event[:end])
-        categories    event[:categories]# Array
-        contacts      event[:contacts] # Array
-        attendees     event[:attendees]# Array
-        duration      event[:duration]
-        summary       event[:title]
-        description   event[:description]
-        klass         event[:accessibility] #PUBLIC, PRIVATE, CONFIDENTIAL
-        location      event[:location]
-        geo_location  event[:geo_location]
-        status        event[:status]
-        url           event[:url]
+      c.event do |e|
+        e.uid = uuid 
+        e.dtstart = DateTime.parse(event[:start])
+        e.dtend = DateTime.parse(event[:end])
+        e.categories = event[:categories]# Array
+        # e.contacts = event[:contacts] # Array
+        # e.attendees = event[:attendees]# Array
+        e.duration = event[:duration]
+        e.summary = event[:title]
+        e.description = event[:description]
+        # e.klass = event[:accessibility] #PUBLIC, PRIVATE, CONFIDENTIAL
+        e.location = event[:location]
+        # e.geo_location = event[:geo_location]
+        e.status = event[:status]
+        e.url = event[:url]
+
+        e.alarm do |a|
+          a.action  = "DISPLAY" # This line isn't necessary, it's the default
+          a.summary = "Alarm notification"
+          a.trigger = "-PT15M"
+          a.x_wr_alarmuid = UUID.new.generate
+          a.description = "Event reminder"
+        end
       end
       cstring = c.to_ical
+      puts cstring
       res = nil
       http = Net::HTTP.new(@host, @port)
       __create_http.start { |http|
         req = Net::HTTP::Put.new("#{@url}/#{uuid}.ics")
         req['Content-Type'] = 'text/calendar'
         if not @authtype == 'digest'
-        	req.basic_auth @user, @password
+          req.basic_auth @user, @password
         else
-        	req.add_field 'Authorization', digestauth('PUT')
+          req.add_field 'Authorization', digestauth('PUT')
         end
         req.body = cstring
         res = http.request( req )
@@ -198,9 +208,9 @@ module CalDAViCloud
       __create_http.start {|http|
         req = Net::HTTP::Get.new("#{@url}/#{uuid}.ics")
         if not @authtype == 'digest'
-        	req.basic_auth @user, @password
+          req.basic_auth @user, @password
         else
-        	req.add_field 'Authorization', digestauth('GET')
+          req.add_field 'Authorization', digestauth('GET')
         end
         res = http.request( req )
       }  
@@ -239,9 +249,9 @@ module CalDAViCloud
         req = Net::HTTP::Put.new("#{@url}/#{uuid}.ics")
         req['Content-Type'] = 'text/calendar'
         if not @authtype == 'digest'
-        	req.basic_auth @user, @password
+          req.basic_auth @user, @password
         else
-        	req.add_field 'Authorization', digestauth('PUT')
+          req.add_field 'Authorization', digestauth('PUT')
         end
         req.body = cstring
         res = http.request( req )
@@ -257,9 +267,9 @@ module CalDAViCloud
       __create_http.start {|http|
         req = Net::HTTP::Report.new(@url, initheader = {'Content-Type'=>'application/xml'} )
         if not @authtype == 'digest'
-        	req.basic_auth @user, @password
+          req.basic_auth @user, @password
         else
-        	req.add_field 'Authorization', digestauth('REPORT')
+          req.add_field 'Authorization', digestauth('REPORT')
         end
         req.body = CalDAViCloud::Request::ReportVTODO.new.to_xml
         res = http.request( req )
@@ -271,20 +281,20 @@ module CalDAViCloud
     private
     
     def digestauth method
-		
-	    h = Net::HTTP.new @duri.host, @duri.port
-	    if @ssl
-	    	h.use_ssl = @ssl
-	    	h.verify_mode = OpenSSL::SSL::VERIFY_NONE
-	    end
-	    req = Net::HTTP::Get.new @duri.request_uri
-	    
-	    res = h.request req
-	    # res is a 401 response with a WWW-Authenticate header
-	    
-	    auth = @digest_auth.auth_header @duri, res['www-authenticate'], method
-	    
-    	return auth
+    
+      h = Net::HTTP.new @duri.host, @duri.port
+      if @ssl
+        h.use_ssl = @ssl
+        h.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      end
+      req = Net::HTTP::Get.new @duri.request_uri
+      
+      res = h.request req
+      # res is a 401 response with a WWW-Authenticate header
+      
+      auth = @digest_auth.auth_header @duri, res['www-authenticate'], method
+      
+      return auth
     end
     
     def entry_with_uuid_exists? uuid
@@ -293,21 +303,21 @@ module CalDAViCloud
       __create_http.start {|http|
         req = Net::HTTP::Get.new("#{@url}/#{uuid}.ics")
         if not @authtype == 'digest'
-        	req.basic_auth @user, @password
+          req.basic_auth @user, @password
         else
-        	req.add_field 'Authorization', digestauth('GET')
+          req.add_field 'Authorization', digestauth('GET')
         end
         
         res = http.request( req )
-      	
+        
       }
       begin
         errorhandling res
-      	Icalendar.parse(res.body)
+        Icalendar.parse(res.body)
       rescue
-      	return false
+        return false
       else
-      	return true
+        return true
       end
     end
     def  errorhandling response   
